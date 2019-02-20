@@ -29,7 +29,8 @@ module Viewpoint::EWS::Types
     end
 
     # Fetch items between a given time period using a calendar view.
-    # The calendar view will expand recurring events.
+    # The calendar view will include occurences of recurring calendar items
+    # next to the regular single calendar items.
     # @param [DateTime] start_date the time to start fetching Items from
     # @param [DateTime] end_date the time to stop fetching Items from
     # @param opts [Hash]
