@@ -25,6 +25,8 @@ module Viewpoint::EWS::Types
     include Viewpoint::EWS
     include Viewpoint::EWS::Types
 
+    attr_reader :contact
+
     MAILBOX_KEY_PATHS = {
       name: [:name, :text],
       email_address: [:email_address, :text],
@@ -34,10 +36,11 @@ module Viewpoint::EWS::Types
       email: :email_address,
     }
 
-    def initialize(ews, mbox_user)
+    def initialize(ews, mbox_user, contact = nil)
       @ews = ews
       @ews_item = mbox_user
       simplify!
+      @contact = Contact.new(ews, contact) if contact
     end
 
     def out_of_office_settings
