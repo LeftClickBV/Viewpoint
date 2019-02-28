@@ -26,8 +26,8 @@ module Viewpoint::EWS::Types
     include Viewpoint::EWS::Types
 
     MAILBOX_KEY_PATHS = {
-      name: [:name],
-      email_address: [:email_address],
+      name: [:name, :text],
+      email_address: [:email_address, :text],
     }
     MAILBOX_KEY_TYPES = {}
     MAILBOX_KEY_ALIAS = {
@@ -134,10 +134,19 @@ module Viewpoint::EWS::Types
 
 
     def simplify!
-      @ews_item = @ews_item.inject({}){|m,o|
-        m[o.keys.first] = o.values.first[:text];
-        m
-      }
+      @ews_item = @ews_item.inject({}) do |o,i|
+        key = i.keys.first
+        if o.has_key?(key)
+          if o[key].is_a?(Array)
+            o[key] << i[key]
+          else
+            o[key] = [o.delete(key), i[key]]
+          end
+        else
+          o[key] = i[key]
+        end
+        o
+      end
     end
 
     def key_paths
